@@ -49,8 +49,6 @@ a {
   text-decoration: none;
   color: inherit;
 }
-a:hover {
-}
 em,
 i {
   font-style: normal;

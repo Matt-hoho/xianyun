@@ -54,7 +54,6 @@ export default {
   methods: {
     handleOption(index) {
       this.current = index;
-
       if(index ===2){
         this.$router.push("/air")
       }
