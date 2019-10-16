@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters :data="cacheFlightsData" @setDataList="setDataList" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -15,7 +15,7 @@
           <flightsItem v-for="(item,index) in dataList" :key="index" :data="item" />
 
           <!-- 分页 -->
-          <el-row type="flex" justify="center" style="margin-top:10px;" v-if="loading">
+          <el-row type="flex" justify="center" style="margin-top:10px;" v-if="!loading">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -43,11 +43,19 @@
 <script>
 import FlightsListHead from "@/components/air/flightsListHead.vue";
 import FlightsItem from "@/components/air/flightsItem.vue";
+import FlightsFilters from "@/components/air/flightsFilters.vue";
 export default {
   data() {
     return {
       flightsData: {
-        flights: []
+        flights: [],
+        info: {},
+        options: {}
+      },
+      cacheFlightsData: {
+        flights: [],
+        info: {},
+        options: {}
       },
       pageIndex: 1,
       pageSize: 5,
@@ -56,7 +64,8 @@ export default {
   },
   components: {
     FlightsListHead,
-    FlightsItem
+    FlightsItem,
+    FlightsFilters
   },
   computed: {
     dataList() {
@@ -74,12 +83,20 @@ export default {
         params: this.$route.query
       }).then(res => {
         this.flightsData = res.data;
+        this.cacheFlightsData = { ...res.data };
         this.loading = false;
       });
     },
-
+    setDataList(arr) {
+      if (arr) {
+        this.pageIndex = 1;
+        this.flightsData.flights = arr;
+        this.flightsData.total = arr.length;
+      }
+    },
     handleSizeChange(val) {
       this.pageSize = val;
+      this.pageIndex = 1;
     },
     handleCurrentChange(val) {
       this.pageIndex = val;
