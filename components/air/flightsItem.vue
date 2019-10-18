@@ -47,7 +47,9 @@
             </el-col>
             <el-col :span="5" class="price">￥{{item.org_settle_price}}</el-col>
             <el-col :span="3" class="choose-button">
-              <el-button type="warning" size="mini">选定</el-button>
+              <nuxt-link :to="`/air/order?id=${data.id}&seat_xid=${item.seat_xid}`">
+                <el-button type="warning" size="mini">选定</el-button>
+              </nuxt-link>
               <p>剩余：{{item.discount}}</p>
             </el-col>
           </el-row>
@@ -58,6 +60,7 @@
 </template>
 
 <script>
+import {computeTime} from "@/utils/utils"
 export default {
   data() {
     return {
@@ -79,23 +82,7 @@ export default {
   },
   computed: {
     rankTime() {
-      const depTime = this.data.dep_time.split(":");
-      const arrTime = this.data.arr_time.split(":");
-
-      if (arrTime[0] < depTime[0]) {
-        arrTime[0] += 24;
-      }
-
-      const start = depTime[0] * 60 + +depTime[1];
-      const end = arrTime[0] * 60 + +arrTime[1];
-
-      const rankTime = end - start;
-
-      const hours = Math.floor(rankTime / 60);
-
-      const min = rankTime % 60;
-      return `${hours}小时${min}分钟`;
-
+     return computeTime(this.data.dep_time,this.data.arr_time);
     }
   }
 };
