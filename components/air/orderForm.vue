@@ -81,7 +81,7 @@ export default {
       insurances: [],
       contactName: "",
       contactPhone: "",
-      captcha: "",
+      captcha: "000000",
       invoice: false
     };
   },
@@ -151,8 +151,14 @@ export default {
         }
       }).then(res => {
         const { message, data } = res.data;
+        const {id} = data;
         this.$message.success(message);
-        this.$emit("handleData", data);
+        this.$router.push({
+          path: "/air/pay",
+          query: {
+            id
+          }
+        });
       });
     }
   },

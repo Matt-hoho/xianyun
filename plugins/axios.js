@@ -13,7 +13,7 @@ export default function({$axios, redirect}){
         if(statusCode === 400){
             Message.warning({message});
         }
-        if(statusCode === 403){
+        if(statusCode === 403 ||statusCode === 401){
             redirect("/user/login");
         }
     })
